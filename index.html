@@ -2,60 +2,154 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>【AI診断】あなたはイケメンかブサイクか</title>
-  <meta name="description" content="【AI診断】">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ff69b4">
-  <meta property="og:url" content="">
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="【AI診断】あなたはイケメンかブサイクか！">
-  <meta property="og:description" content="イケメンかブサイクか分かるAI診断！客観的にAI分析し５秒で自分の顔レベルがわかる、高精度な無料AI診断アプリ！このアプリを使えば、自分がイケメンかどうかすぐに分かります！">
-  <meta property="og:site_name" content="">
-  <meta property="og:image" content="">
-  <link rel="icon" type="image/png" href="">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>顔偏差値診断アプリ</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      width:100%; height:100%;
-      background:#000;
-      color:#fff;
-      font-family: sans-serif;
-      display:flex; align-items:center; justify-content:center;
-      flex-direction:column;
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
     }
-    h1 { margin-bottom: 2rem; font-size:1.5rem; }
-    button {
-      background: #ff69b4;
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+    }
+    h1 {
+      color: #4a6baf;
+      margin-bottom: 10px;
+      font-size: 2.2rem;
+    }
+    .description {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    #video {
+      width: 100%;
+      border-radius: 10px;
+      display: none;
+      margin: 20px 0;
+      background: #000;
+      transform: scaleX(-1);
+    }
+    #startButton {
+      background: linear-gradient(135deg, #4a6baf 0%, #3a56a0 100%);
+      color: white;
       border: none;
-      padding: 0.8rem 1.6rem;
-      border-radius: 999px;
-      color: #fff;
-      font-size: 1rem;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border-radius: 50px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(74, 107, 175, 0.3);
     }
-    button:disabled {
-      opacity: 0.6;
-      cursor: default;
+    #startButton:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(74, 107, 175, 0.4);
     }
-    #status {
-      margin-top: 1rem;
-      font-size: 1rem;
-      color: #ddd;
-      min-height: 1.2em;
+    #startButton:disabled {
+      background: #ccc;
+      transform: none;
+      box-shadow: none;
+      cursor: not-allowed;
     }
-    video, canvas { display: none; }
+    #loading {
+      display: none;
+      margin: 20px 0;
+    }
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #4a6baf;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    #result {
+      display: none;
+      margin-top: 30px;
+      animation: fadeIn 1s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .score {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #4a6baf;
+      margin: 20px 0;
+    }
+    .comment {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+    .retry-btn {
+      background: #f0f0f0;
+      color: #333;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 20px;
+    }
+    .retry-btn:hover {
+      background: #e0e0e0;
+    }
+    .notice {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 30px;
+    }
+    #cameraStatus {
+      margin: 10px 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
-  <h1>AIがあなたの顔を診断します</h1>
-  <button id="startBtn">診断スタート</button>
-  <div id="status"></div>
-
-  <video id="video" autoplay playsinline></video>
-  <canvas id="canvas"></canvas>
-
-  <!-- 外部JSの読み込み -->
+  <div class="container">
+    <h1>顔偏差値診断</h1>
+    <p class="description">
+      カメラの前に立ち、診断開始ボタンを押してください。<br>
+      5秒間の録画後に自動的に診断結果が表示されます。
+    </p>
+    <button id="startButton">診断開始</button>
+    <div id="cameraStatus"></div>
+    <video id="video" autoplay muted playsinline></video>
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>診断中... しばらくお待ちください</p>
+    </div>
+    <div id="result">
+      <h2>診断結果</h2>
+      <div class="score" id="scoreValue">80</div>
+      <p class="comment" id="comment">素晴らしいバランスの整った顔立ちです！</p>
+      <button class="retry-btn" onclick="window.location.reload()">もう一度診断する</button>
+    </div>
+    <p class="notice">
+      ※この診断はAIによる分析結果であり、医学的根拠に基づくものではありません
+    </p>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

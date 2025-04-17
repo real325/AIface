@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【AI診断】あなたはイケメンかブサイクか</title>
+  <meta name="description" content="【AI診断】">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ff69b4">
+  <meta property="og:url" content="">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="【AI診断】あなたはイケメンかブサイクか！">
+  <meta property="og:description" content="イケメンかブサイクか分かるAI診断！客観的にAI分析し５秒で自分の顔レベルがわかる、高精度な無料AI診断アプリ！このアプリを使えば、自分がイケメンかどうかすぐに分かります！">
+  <meta property="og:site_name" content="">
+  <meta property="og:image" content="">
+  <link rel="icon" type="image/png" href="">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body {
+      width:100%; height:100%;
+      background:#000;
+      color:#fff;
+      font-family: sans-serif;
+      display:flex; align-items:center; justify-content:center;
+      flex-direction:column;
+    }
+    h1 { margin-bottom: 2rem; font-size:1.5rem; }
+    button {
+      background: #ff69b4;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    #status {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #ddd;
+      min-height: 1.2em;
+    }
+    video, canvas { display: none; }
+  </style>
+</head>
+<body>
+  <h1>AIがあなたの顔を診断します</h1>
+  <button id="startBtn">診断スタート</button>
+  <div id="status"></div>
+
+  <video id="video" autoplay playsinline></video>
+  <canvas id="canvas"></canvas>
+
+  <!-- 外部JSの読み込み -->
+  <script src="script.js"></script>
+</body>
+</html>
